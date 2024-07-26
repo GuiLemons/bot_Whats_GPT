@@ -304,10 +304,10 @@ def handle_whatsapp_message(phone_number, message_text):
     send_whatsapp_message(phone_number, response_text)
 
 def send_whatsapp_message(phone_number, text):
-    url = 'https://api.z-api.io/instances/3D2B54358DC24044780C46F5ACE1CF22/token/765C6D036216D9358CBD9CC0/send-text'
+    url = 'https://api.z-api.io/instances/3D2D847B0B21504ADF33DE727DBFBF62/token/A267FC1DCE24E72831801ABC/send-text'
     headers = {
         'Content-Type': 'application/json',
-        'Client-Token': 'F23fb3a7f1be342a98eafebf0ff980371S'
+        'Client-Token': 'F984a4507ebc0486da941c9c1484e1721S'
     }
     data = {
         'phone': phone_number,
@@ -329,7 +329,7 @@ def send_whatsapp_message(phone_number, text):
         
 if __name__ == '__main__':
     app.run(debug=True)
-    
+  #conta atual do z-api lemosgui@gmail.com
    
     
     
