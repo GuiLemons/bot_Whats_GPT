@@ -9,7 +9,7 @@ import time
 app = Flask(__name__)
 
 api_key = os.getenv('OPENAI_API_KEY')
-
+#fiz uma mudança aqui
 # Initialize the OpenAI client with the API key
 client = openai.OpenAI(api_key=api_key)
 
