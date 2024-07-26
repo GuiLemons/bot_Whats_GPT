@@ -316,18 +316,7 @@ def send_whatsapp_message(phone_number, text):
         'message': text,
         'delayTyping':5,
     }
-def send_whatsapp_image(phone_number, text):
-    url = 'https://api.z-api.io/instances/3D2D847B0B21504ADF33DE727DBFBF62/token/A267FC1DCE24E72831801ABC/send-text'
-    headers = {
-        'Content-Type': 'application/json',
-        'Client-Token': 'F984a4507ebc0486da941c9c1484e1721S'
-    }
-    data = {
-       
-        'phone': phone_number,
-        "image": "https://imagens.usp.br/wp-content/uploads/pratodecomidafotomarcossantos003.jpg",
-        "caption": "Logo"
-    }
+
     
 
     try:
@@ -341,6 +330,19 @@ def send_whatsapp_image(phone_number, text):
     except Exception as e:
         print(f'Erro ao enviar mensagem para {phone_number}: {str(e)}')
 
+        
+def send_whatsapp_image(phone_number, text):
+    url = 'https://api.z-api.io/instances/3D2D847B0B21504ADF33DE727DBFBF62/token/A267FC1DCE24E72831801ABC/send-text'
+    headers = {
+        'Content-Type': 'application/json',
+        'Client-Token': 'F984a4507ebc0486da941c9c1484e1721S'
+    }
+    data = {
+       
+        'phone': phone_number,
+        "image": "https://imagens.usp.br/wp-content/uploads/pratodecomidafotomarcossantos003.jpg",
+        "caption": "Logo"
+    }
         
 if __name__ == '__main__':
     app.run(debug=True)
