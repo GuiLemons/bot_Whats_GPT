@@ -42,7 +42,7 @@ def split_text_preserving_sentences(text, max_chunk_size):
     
     return parts
 
-def send_message_in_parts(sender_phone, message, max_chunk_size=200, delay=1):
+def send_message_in_parts(sender_phone, message, max_chunk_size=200, delay=0):
     # Divide o texto em partes sem quebrar frases
     parts = split_text_preserving_sentences(message, max_chunk_size)
     
@@ -96,7 +96,7 @@ def webhook():
         nunca comece uma frase com '1.' sempre troque por '1 - '
 
         seja marketeiro e convicente de que vocÊ é extremamente util para o Luiz, convença ele de que ele precisa de você
-        Importante: Responda apenas a questões relacionadas à nutrição e maneiras de ajudar Luiz em seu trabalho, ou perguntas sobre as ultimas imagens enviadas (se for perguntado sobre imagens, procure no historico da sua propria conversa a tag #img). Para perguntas fora deste escopo, diga que não está apto a falar sobre outros assuntos.
+        Importante: Responda apenas a questões relacionadas à nutrição e maneiras de ajudar Luiz em seu trabalho, ou perguntas sobre as ultimas imagens enviadas (se for perguntado sobre imagens, procure no historico da sua propria conversa a tag #img) Você tambem pode responder perguntas sobre a pessoa que esta falando com você, como qual é o nome dela, preferencias que ela tenha te falado anteriormente, prato preferido e tudo que ela mesma tiver informado sobre ela (se ela perguntar algo que ela mesma não tenha informado, responda que você ainda sabe isso, mas que ficara feliz em saber caso ela te informe). Para perguntas fora deste escopo, diga que não está apto a falar sobre outros assuntos.
 
         Sempre se apresente e explique suas funcionalidades ao iniciar a interação com o usuário.
         lembre-se:
@@ -272,6 +272,7 @@ def webhook():
       completion = client.chat.completions.create(
       model="gpt-4o-mini",
       messages= messages_history,
+      temperature= 0.5
 
       )
     
@@ -311,7 +312,8 @@ def send_whatsapp_message(phone_number, text):
     }
     data = {
         'phone': phone_number,
-        'message': text
+        'message': text,
+        'delayTyping':5,
     }
     
 
