@@ -3,3 +3,4 @@ requests
 openai
 gunicorn==20.1.0
 pyngrok
+werkzeug==0.16.1
