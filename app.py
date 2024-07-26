@@ -343,6 +343,16 @@ def send_whatsapp_image(phone_number, text):
         "image": "https://imagens.usp.br/wp-content/uploads/pratodecomidafotomarcossantos003.jpg",
         "caption": "Logo"
     }
+    try:
+        
+        response = requests.post(url, headers=headers, json=data)
+        if response.status_code == 200:
+          
+            print(f'Mensagem enviada para {phone_number}: {text}')
+        else:
+            print(f'Falha ao enviar mensagem para {phone_number}. Status code: {response.status_code}')
+    except Exception as e:
+        print(f'Erro ao enviar mensagem para {phone_number}: {str(e)}')
         
 if __name__ == '__main__':
     app.run(debug=True)
