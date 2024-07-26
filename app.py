@@ -54,7 +54,9 @@ def send_message_in_parts(sender_phone, message, max_chunk_size=200, delay=1):
 def process_response(sender_phone, response_text, max_chunk_size=200, delay=1):
     send_message_in_parts(sender_phone, response_text, max_chunk_size, delay)
     
-    
+@app.route('/')
+def index():
+    return 'Hello, World!'
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
