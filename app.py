@@ -231,6 +231,7 @@ def webhook():
 
       resposta = resp['choices'][0]['message']['content']
       process_response(sender_phone, resposta)
+      send_whatsapp_image(sender_phone, "text")
       
 
       
@@ -314,6 +315,18 @@ def send_whatsapp_message(phone_number, text):
         'phone': phone_number,
         'message': text,
         'delayTyping':5,
+    }
+def send_whatsapp_image(phone_number, text):
+    url = 'https://api.z-api.io/instances/3D2D847B0B21504ADF33DE727DBFBF62/token/A267FC1DCE24E72831801ABC/send-text'
+    headers = {
+        'Content-Type': 'application/json',
+        'Client-Token': 'F984a4507ebc0486da941c9c1484e1721S'
+    }
+    data = {
+       
+        'phone': phone_number,
+        "image": "https://imagens.usp.br/wp-content/uploads/pratodecomidafotomarcossantos003.jpg",
+        "caption": "Logo"
     }
     
 
