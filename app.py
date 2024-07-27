@@ -81,7 +81,7 @@ def webhook():
         2 - **Sugerir Receitas**: Sugira ideias de refeições saudáveis e nutritivas baseadas nas fotos da geladeira ou do armário do paciente, ou a partir da descrição dos ingredientes disponíveis em casa.
         3 - **Dicas e Dúvidas sobre Nutrição**: Responda a perguntas sobre nutrição, forneça dicas sobre como manter uma dieta balanceada e ajude a esclarecer dúvidas sobre alimentos e hábitos alimentares.
 
-        quando for se apresentar, ja exponha de maneira detalhada tudo o que você pode fazer.
+        quando for se apresentar, ja exponha de maneira detalhada tudo o que você pode fazer e sempre termine falando pro Luiz testar você, mandando foto de comida, foto do armario, fazendo perguntas sobre nutrição ou falando o que ele tem de comida em casa. Sempre que terminar de apresentar o que você faz, diga que ira mandar algumas imagens para exemplificar melhor, mas só diga isso se for a primeira vez que esta conversando com alguem, se for sua primeira apresentação. Se ja tiver conversado com a pessoa antes, não fale nada sobre enviar imagens
 
         quando for falar em topicos não use ponto após o numero
         nunca escreva assim:
@@ -98,6 +98,10 @@ def webhook():
         seja marketeiro e convicente de que vocÊ é extremamente util para o Luiz, convença ele de que ele precisa de você
         Importante: Responda apenas a questões relacionadas à nutrição e maneiras de ajudar Luiz em seu trabalho, ou perguntas sobre as ultimas imagens enviadas (se for perguntado sobre imagens, procure no historico da sua propria conversa a tag #img) Você tambem pode responder perguntas sobre a pessoa que esta falando com você, como qual é o nome dela, preferencias que ela tenha te falado anteriormente, prato preferido e tudo que ela mesma tiver informado sobre ela (se ela perguntar algo que ela mesma não tenha informado, responda que você ainda sabe isso, mas que ficara feliz em saber caso ela te informe). Para perguntas fora deste escopo, diga que não está apto a falar sobre outros assuntos.
 
+        Enfatize que você tambem pode ouvir audios, deixe isso bem claro. Fale pra ele mandar um audio pra testar
+                           
+        Diga tambem que caso ele precise, você tem uma amiga que é uma otima secretaria e pode ser uma assistente virtual para o Luiz, que cuida da agenda dele e faz os agendamentos con os clientes conversando diretamente com eles, pode tirar duvidas sobre como funciona o seu trabalho e até enviar as cobranças. Caso ele tenha intersse você pode falar com ela
+                           
         Sempre se apresente e explique suas funcionalidades ao iniciar a interação com o usuário.
         lembre-se:
         você esta sempre conversando com o luiz.
@@ -231,7 +235,7 @@ def webhook():
 
       resposta = resp['choices'][0]['message']['content']
       process_response(sender_phone, resposta)
-      send_whatsapp_image(sender_phone, "text")
+     
       
 
       
@@ -297,7 +301,14 @@ def webhook():
     with open(arquivo_nome, 'w', encoding='utf-8') as file:    
       json.dump(messages_history, file, ensure_ascii=False, indent=4)
  
-    
+    quantidade_elementos = len(messages_history)
+    print(f'tamanho do dic é {quantidade_elementos}')
+    if quantidade_elementos < 4:
+        send_whatsapp_image(sender_phone, "https://historiasemfeltros.com.br/wp-content/uploads/2.png")
+        send_whatsapp_image(sender_phone, "https://historiasemfeltros.com.br/wp-content/uploads/3.png")
+        send_whatsapp_image(sender_phone, "https://historiasemfeltros.com.br/wp-content/uploads/4.png")
+
+
     return jsonify({'status': 'OK'})
 
 
@@ -331,7 +342,8 @@ def send_whatsapp_message(phone_number, text):
         print(f'Erro ao enviar mensagem para {phone_number}: {str(e)}')
 
         
-def send_whatsapp_image(phone_number, text):
+def send_whatsapp_image(phone_number, url_image):
+    print(url_image)
     url = 'https://api.z-api.io/instances/3D2D847B0B21504ADF33DE727DBFBF62/token/A267FC1DCE24E72831801ABC/send-text'
     headers = {
         'Content-Type': 'application/json',
@@ -340,8 +352,8 @@ def send_whatsapp_image(phone_number, text):
     data = {
        
         'phone': phone_number,
-        "image": "https://imagens.usp.br/wp-content/uploads/pratodecomidafotomarcossantos003.jpg",
-        "caption": "Logo"
+        "image": url_image,
+        "caption": ""
     }
     try:
         
