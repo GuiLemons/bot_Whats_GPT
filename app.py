@@ -64,6 +64,15 @@ def webhook():
     global messages_history
   
     data = request.json
+    # Extrai o valor de remoteJid
+    #remote_jid = data['phone']
+
+
+    # Usa uma expressão regular para extrair apenas a parte numérica
+    #numerical_part = re.search(r'\d+', remote_jid).group()
+
+    #print(numerical_part)
+    
     sender_phone = data.get('phone')
     arquivo_nome = sender_phone+"_dicionario.txt" #CARREGA O HISTORICO DA CONVERSA
     if os.path.exists(arquivo_nome):
@@ -136,7 +145,7 @@ def webhook():
       
       ###########     
       
-      image_path = data['image']['imageUrl']
+      image_path = data['image_url']
       
       #guardando a descrição da imagem no historico da conversa
       messages_history.append({"role":"system", "content": "foi enviado uma imagem pra você, Aqui esta uma  tag #img"} )
@@ -159,7 +168,7 @@ def webhook():
             {
               "type": "image_url",
               "image_url": {
-                "url": image_path
+                "url": f"data:image/jpeg;base64,{image_path}"
               }
             }
             ]
@@ -182,8 +191,8 @@ def webhook():
       #agora irá analisar a imagem em si de acordo com o pedido do user
       message_text = "você é um assistente de nutrição que esta ajudando a pessoa da conversa a se manter na dieta, ja há uma conversa acontecendo entre vocÊs e agora ela mandou uma imagem, você irá analisar a imagem a partir do seguinte comenado:"
       #verifico se foi enviado uma mensagem junto com a imagem
-      if data['image'].get('caption') =="":
-         message_text = message_text + "" + """Verifique se na imagem há uma geladeira, aramario ou algum alimento especifico. Se vocÊ verificar que essa imagem é um prato de comida ou um alimento especifico, me diga quais alimentos ve e descreva os macronutrientes e calorias contidos nele. Se você indentificar que seja um geladeira ou um armario com alimentos guardados, verifique quais alimentos você dentro dela e liste quais são eles e depois indique alguma receita que pode ser feita com os alimentos que vê  quando for falar em topicos não use ponto após o numero
+      
+      message_text = message_text + "" + """Verifique se na imagem há uma geladeira, aramario ou algum alimento especifico. Se vocÊ verificar que essa imagem é um prato de comida ou um alimento especifico, me diga quais alimentos ve e descreva os macronutrientes e calorias contidos nele. Se você indentificar que seja um geladeira ou um armario com alimentos guardados, verifique quais alimentos você dentro dela e liste quais são eles e depois indique alguma receita que pode ser feita com os alimentos que vê  quando for falar em topicos não use ponto após o numero
         nunca escreva assim:
         '1. possso fazer isso
          2. posso fazer isso tambem'
@@ -196,8 +205,8 @@ def webhook():
         nunca comece uma frase com '1.' sempre troque por '1 - '. Caso não tenha nenhum alimento na imagem e tambem não seja uma geladeira ou um armario com alimentos, diga que você só pode analisar imagens com alimentos"""
       
         
-      else:
-        message_text = message_text + "" +  data['image']['caption']
+      if 'caption' in data:
+        message_text = message_text + "" +  data['caption']
            
       
       messages_history.append({"role":"user", "content": message_text} )
@@ -221,7 +230,7 @@ def webhook():
             {
               "type": "image_url",
               "image_url": {
-                "url": image_path
+                "url": f"data:image/jpeg;base64,{image_path}"
               }
             }
             ]
@@ -317,22 +326,27 @@ def handle_whatsapp_message(phone_number, message_text):
     send_whatsapp_message(phone_number, response_text)
 
 def send_whatsapp_message(phone_number, text):
-    url = 'https://api.z-api.io/instances/3D2D847B0B21504ADF33DE727DBFBF62/token/A267FC1DCE24E72831801ABC/send-text'
+    url = "https://evolutionapi.guilemons.com.br/message/sendText/testewhatsDemo"
     headers = {
-        'Content-Type': 'application/json',
-        'Client-Token': 'F984a4507ebc0486da941c9c1484e1721S'
+      "apikey": "z0n7eIizZt0gdavboOi0k0CZYUFYC976",
+      "Content-Type": "application/json"
     }
-    data = {
-        'phone': phone_number,
-        'message': text,
-        'delayTyping':5,
+    payload = {
+      "number": phone_number,
+      "options": {
+          "delay": 8000,
+          "presence": "composing",
+          "linkPreview": True,
+          
+      },
+      "textMessage": {"text": text}
     }
 
     
 
     try:
         
-        response = requests.post(url, headers=headers, json=data)
+        response = requests.post(url, headers=headers, json=payload)
         if response.status_code == 200:
           
             print(f'Mensagem enviada para {phone_number}: {text}')
@@ -344,10 +358,10 @@ def send_whatsapp_message(phone_number, text):
         
 def send_whatsapp_image(phone_number, url_image):
     print(url_image)
-    url = 'https://api.z-api.io/instances/3D2D847B0B21504ADF33DE727DBFBF62/token/A267FC1DCE24E72831801ABC/send-text'
+    url = "https://evolutionapi.guilemons.com.br/message/sendText/testewhatsDemo"
     headers = {
-        'Content-Type': 'application/json',
-        'Client-Token': 'F984a4507ebc0486da941c9c1484e1721S'
+      "apikey": "z0n7eIizZt0gdavboOi0k0CZYUFYC976",
+      "Content-Type": "application/json"
     }
     data = {
        
@@ -360,7 +374,7 @@ def send_whatsapp_image(phone_number, url_image):
         response = requests.post(url, headers=headers, json=data)
         if response.status_code == 200:
           
-            print(f'Mensagem enviada para {phone_number}: {text}')
+            print(f'Mensagem enviada para {phone_number}: {url_image}')
         else:
             print(f'Falha ao enviar mensagem para {phone_number}. Status code: {response.status_code}')
     except Exception as e:
