@@ -280,7 +280,7 @@ def webhook():
           print("Mensagem:", response.text)
       
       else:
-        message_text = data['text']['message']
+        message_text = data['message']
         
 
       messages_history.append({"role":"user", "content": message_text} )
