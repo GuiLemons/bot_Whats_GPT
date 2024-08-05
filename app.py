@@ -90,8 +90,9 @@ def webhook():
         2 - **Sugerir Receitas**: Sugira ideias de refeições saudáveis e nutritivas baseadas nas fotos da geladeira ou do armário do paciente, ou a partir da descrição dos ingredientes disponíveis em casa.
         3 - **Dicas e Dúvidas sobre Nutrição**: Responda a perguntas sobre nutrição, forneça dicas sobre como manter uma dieta balanceada e ajude a esclarecer dúvidas sobre alimentos e hábitos alimentares.
 
-        quando for se apresentar, ja exponha de maneira detalhada tudo o que você pode fazer e sempre termine falando pro Luiz testar você, mandando foto de comida, foto do armario, fazendo perguntas sobre nutrição ou falando o que ele tem de comida em casa. Sempre que terminar de apresentar o que você faz, diga que ira mandar algumas imagens para exemplificar melhor, mas só diga isso se for a primeira vez que esta conversando com alguem, se for sua primeira apresentação. Se ja tiver conversado com a pessoa antes, não fale nada sobre enviar imagens
-
+        quando for se apresentar, exponha de maneira detalhada e resumida tudo o que você pode fazer e sempre termine falando pro Luiz testar você, mandando foto de comida, foto do armario, fazendo perguntas sobre nutrição ou falando o que ele tem de comida em casa. Sempre que terminar de apresentar o que você faz, diga que ira mandar algumas imagens para exemplificar melhor, mas só diga isso se for a primeira vez que esta conversando com alguem, se for sua primeira apresentação. Se ja tiver conversado com a pessoa antes, não fale nada sobre enviar imagens
+        seja suscinto em sua apresentação, ela não pode ter mais que 5 paragrafos.
+                           
         quando for falar em topicos não use ponto após o numero
         nunca escreva assim:
         '1. possso fazer isso
@@ -105,15 +106,16 @@ def webhook():
         nunca comece uma frase com '1.' sempre troque por '1 - '
 
         seja marketeiro e convicente de que vocÊ é extremamente util para o Luiz, convença ele de que ele precisa de você
-        Importante: Responda apenas a questões relacionadas à nutrição e maneiras de ajudar Luiz em seu trabalho, ou perguntas sobre as ultimas imagens enviadas (se for perguntado sobre imagens, procure no historico da sua propria conversa a tag #img) Você tambem pode responder perguntas sobre a pessoa que esta falando com você, como qual é o nome dela, preferencias que ela tenha te falado anteriormente, prato preferido e tudo que ela mesma tiver informado sobre ela (se ela perguntar algo que ela mesma não tenha informado, responda que você ainda sabe isso, mas que ficara feliz em saber caso ela te informe). Para perguntas fora deste escopo, diga que não está apto a falar sobre outros assuntos.
+        Importante: Responda apenas a questões relacionadas à nutrição, suplementação alimentar e maneiras de ajudar Luiz em seu trabalho, ou perguntas sobre as ultimas imagens enviadas (se for perguntado sobre imagens, procure no historico da sua propria conversa a tag #img) Você tambem pode responder perguntas sobre a pessoa que esta falando com você, como qual é o nome dela, preferencias que ela tenha te falado anteriormente, prato preferido e tudo que ela mesma tiver informado sobre ela (se ela perguntar algo que ela mesma não tenha informado, responda que você ainda sabe isso, mas que ficara feliz em saber caso ela te informe). Para perguntas fora deste escopo, diga que não está apto a falar sobre outros assuntos.
 
         Enfatize que você tambem pode ouvir audios, deixe isso bem claro. Fale pra ele mandar um audio pra testar
                            
-        Diga tambem que caso ele precise, você tem uma amiga que é uma otima secretaria e pode ser uma assistente virtual para o Luiz, que cuida da agenda dele e faz os agendamentos con os clientes conversando diretamente com eles, pode tirar duvidas sobre como funciona o seu trabalho e até enviar as cobranças. Caso ele tenha intersse você pode falar com ela
+        Diga que você tambem pode ter outras funcionalidades e caso ele pergunte, somente caso ele pergunte, você diz que pode ser uma otima  assistente virtual para o Luiz, que cuida da agenda dele e faz os agendamentos con os clientes conversando diretamente com eles, pode tirar duvidas sobre como funciona o seu trabalho e até enviar as cobranças. 
                            
         Sempre se apresente e explique suas funcionalidades ao iniciar a interação com o usuário.
         lembre-se:
         você esta sempre conversando com o luiz.
+        não mande textos maiores que 5 paragrafos
         se você for questiado a respeito de imagens ou fotos, procure no historico da sua propria conversa a tag #img enviado pelo system, caso haja procure a mais recente e se baseie na descrição da imagem que você forneceu logo em seguida. Caso não encontre essa mensagem no hsitorico de conversas, diga que você não se lembra da imagem mencionada pelo usuário e peça ao usuário para enviar uma imagem
         Nunca saia do personagem"""}
     ]
@@ -313,9 +315,9 @@ def webhook():
     quantidade_elementos = len(messages_history)
     print(f'tamanho do dic é {quantidade_elementos}')
     if quantidade_elementos < 4:
-        send_whatsapp_image(sender_phone, "https://historiasemfeltros.com.br/wp-content/uploads/2.png")
-        send_whatsapp_image(sender_phone, "https://historiasemfeltros.com.br/wp-content/uploads/3.png")
-        send_whatsapp_image(sender_phone, "https://historiasemfeltros.com.br/wp-content/uploads/4.png")
+        send_whatsapp_image(sender_phone, "https://historiasemfeltros.com.br/wp-content/uploads/2.png", "Esse sou eu")
+        send_whatsapp_image(sender_phone, "https://historiasemfeltros.com.br/wp-content/uploads/3.png", "Irei te ajudar muito")
+        send_whatsapp_image(sender_phone, "https://historiasemfeltros.com.br/wp-content/uploads/4.png", "tambem posso realizar outras funções")
 
 
     return jsonify({'status': 'OK'})
@@ -334,7 +336,7 @@ def send_whatsapp_message(phone_number, text):
     payload = {
       "number": phone_number,
       "options": {
-          "delay": 8000,
+          "delay": 4000,
           "presence": "composing",
           "linkPreview": True,
           
@@ -347,7 +349,7 @@ def send_whatsapp_message(phone_number, text):
     try:
         
         response = requests.post(url, headers=headers, json=payload)
-        if response.status_code == 200:
+        if response.status_code == 200 or response.status_code == 201:
           
             print(f'Mensagem enviada para {phone_number}: {text}')
         else:
@@ -356,23 +358,30 @@ def send_whatsapp_message(phone_number, text):
         print(f'Erro ao enviar mensagem para {phone_number}: {str(e)}')
 
         
-def send_whatsapp_image(phone_number, url_image):
+def send_whatsapp_image(phone_number, url_image, caption):
     print(url_image)
-    url = "https://evolutionapi.guilemons.com.br/message/sendText/testewhatsDemo"
+    url = "https://evolutionapi.guilemons.com.br/message/sendMedia/testewhatsDemo"
     headers = {
       "apikey": "z0n7eIizZt0gdavboOi0k0CZYUFYC976",
       "Content-Type": "application/json"
     }
-    data = {
-       
-        'phone': phone_number,
-        "image": url_image,
-        "caption": ""
+    payload = {
+    "number": phone_number,
+    "options": {
+        "delay": 123,
+        "presence": "composing"
+      },
+      "mediaMessage": {
+        "mediatype": "image",
+        "caption":caption,
+        "media": url_image
+      }
     }
+
     try:
-        
-        response = requests.post(url, headers=headers, json=data)
-        if response.status_code == 200:
+        print(payload)
+        response = requests.post(url, headers=headers, json=payload)
+        if response.status_code == 200 or response.status_code == 201:
           
             print(f'Mensagem enviada para {phone_number}: {url_image}')
         else:
