@@ -412,13 +412,3 @@ def send_whatsapp_image(phone_number, url_image, caption):
         
 if __name__ == '__main__':
     app.run(debug=True)
-  #conta atual do z-api lemosgui@gmail.com
-   
-    
-    
-    
-
-
-
-
-  
